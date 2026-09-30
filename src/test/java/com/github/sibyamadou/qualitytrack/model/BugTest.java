@@ -100,4 +100,70 @@ public class BugTest {
                 () -> bug.startProgress()
         );
     }
+    @Test
+    void bugShouldNotBeCreatedWithEmptyTitle() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Bug(
+                        7,
+                        "",
+                        "Erreur dans l'application",
+                        Priority.HIGH
+                )
+        );
+    }
+    @Test
+    void bugShouldNotBeCreatedWithNullTitle() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Bug(
+                        8,
+                        null,
+                        "Erreur dans l'application",
+                        Priority.HIGH
+                )
+        );
+    }
+    @Test
+    void bugShouldNotBeCreatedWithBlankTitle() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Bug(
+                        9,
+                        "     ",
+                        "Erreur dans l'application",
+                        Priority.HIGH
+                )
+        );
+    }
+
+    @Test
+    void bugShouldNotBeCreatedWithNullPriority() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Bug(
+                        10,
+                        "Erreur de connexion",
+                        "Impossible de se connecter",
+                        null
+                )
+        );
+    }
+    @Test
+    void bugShouldNotBeCreatedWithInvalidId() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Bug(
+                        0,
+                        "Erreur de connexion",
+                        "Impossible de se connecter",
+                        Priority.HIGH
+                )
+        );
+    }
 }

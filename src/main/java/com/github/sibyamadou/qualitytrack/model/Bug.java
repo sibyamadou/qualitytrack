@@ -9,6 +9,21 @@ public class Bug {
     private BugStatus status;
 
     public Bug(int id, String title, String description, Priority priority) {
+        if (id <= 0) {
+            throw new IllegalArgumentException(
+                    "L'identifiant d'un bug doit être strictement positif"
+            );
+        }
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Le titre d'un bug ne peut pas être vide"
+            );
+        }
+        if (priority == null) {
+            throw new IllegalArgumentException(
+                    "La priorité d'un bug ne peut pas être nulle"
+            );
+        }
         this.id = id;
         this.title = title;
         this.description = description;
