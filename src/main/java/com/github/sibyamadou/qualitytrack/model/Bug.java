@@ -45,7 +45,10 @@ public class Bug {
     }
 
     public void validate() {
-        this.status = BugStatus.VALIDATED;
+        if(this.status == BugStatus.FIXED){
+            this.status = BugStatus.VALIDATED;
+        }
+
     }
 
 }
