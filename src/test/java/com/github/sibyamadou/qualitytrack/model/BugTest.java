@@ -1,6 +1,7 @@
 package com.github.sibyamadou.qualitytrack.model;
 import org.junit.jupiter.api.Test;
 import  static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BugTest {
     @Test
     void  newBugShouldBeOpen() {
@@ -22,10 +23,10 @@ public class BugTest {
                 "Le paiement échoue",
                 Priority.CRITICAL
         );
-
-        bug.validate();
-
-        assertEquals(BugStatus.OPEN, bug.getStatus());
+        assertThrows(
+                IllegalStateException.class,
+                () -> bug.validate()
+        );
     }
     @Test
     void fixedBugShouldBeValidated() {
@@ -53,9 +54,10 @@ public class BugTest {
                 Priority.HIGH
         );
 
-        bug.markAsFixed();
-
-        assertEquals(BugStatus.OPEN, bug.getStatus());
+        assertThrows(
+                IllegalStateException.class,
+                () -> bug.markAsFixed()
+        );
     }
 
     @Test
@@ -93,7 +95,9 @@ public class BugTest {
         assertEquals(BugStatus.FIXED, bug.getStatus());
         bug.validate();
         assertEquals(BugStatus.VALIDATED, bug.getStatus());
-        bug.startProgress();
-        assertEquals(BugStatus.VALIDATED, bug.getStatus());
+        assertThrows(
+              IllegalStateException.class,
+                () -> bug.startProgress()
+        );
     }
 }

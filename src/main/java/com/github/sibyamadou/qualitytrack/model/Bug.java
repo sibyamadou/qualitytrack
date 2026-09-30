@@ -38,21 +38,31 @@ public class Bug {
     }
 
     public void startProgress() {
-        if(this.status == BugStatus.OPEN){
-            this.status = BugStatus.IN_PROGRESS;
+        if(this.status != BugStatus.OPEN){
+            throw new IllegalStateException(
+                    "Un bug ne peut être démarré que s'il est OPEN"
+            );
         }
+        this.status = BugStatus.IN_PROGRESS;
     }
 
     public void markAsFixed() {
-        if(this.status == BugStatus.IN_PROGRESS){
-            this.status = BugStatus.FIXED;
+        if (this.status != BugStatus.IN_PROGRESS) {
+            throw new IllegalStateException(
+                    "Un bug ne peut être marqué comme corrigé que s'il est IN_PROGRESS"
+            );
         }
+
+        this.status = BugStatus.FIXED;
     }
 
     public void validate() {
-        if(this.status == BugStatus.FIXED){
-            this.status = BugStatus.VALIDATED;
+        if(this.status != BugStatus.FIXED){
+            throw new IllegalStateException(
+                    "Un bug ne peut être validé que s'il est FIXED"
+            );
         }
+        this.status = BugStatus.VALIDATED;
 
     }
 
