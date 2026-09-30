@@ -43,4 +43,57 @@ public class BugTest {
 
         assertEquals(BugStatus.VALIDATED, bug.getStatus());
     }
+    @Test
+    void openBugShouldNotBeFixedDirectly() {
+
+        Bug bug = new Bug(
+                4,
+                "Erreur panier",
+                "Le panier ne calcule pas correctement le total",
+                Priority.HIGH
+        );
+
+        bug.markAsFixed();
+
+        assertEquals(BugStatus.OPEN, bug.getStatus());
+    }
+
+    @Test
+    void inProgressBugShouldBeFixed() {
+
+        Bug bug = new Bug(
+                5,
+                "Erreur de recherche",
+                "La recherche ne retourne aucun résultat",
+                Priority.MEDIUM
+        );
+
+        bug.startProgress();
+
+        assertEquals(BugStatus.IN_PROGRESS, bug.getStatus());
+
+        bug.markAsFixed();
+
+        assertEquals(BugStatus.FIXED, bug.getStatus());
+    }
+    @Test
+    void validatedBugShouldNotBeStartedAgain() {
+        Bug bug = new Bug(
+                6,
+                "Erreur de validation",
+                "Le resultat  n'est pas validé",
+                Priority.MEDIUM
+        );
+        bug.startProgress();
+
+        assertEquals(BugStatus.IN_PROGRESS, bug.getStatus());
+
+        bug.markAsFixed();
+
+        assertEquals(BugStatus.FIXED, bug.getStatus());
+        bug.validate();
+        assertEquals(BugStatus.VALIDATED, bug.getStatus());
+        bug.startProgress();
+        assertEquals(BugStatus.VALIDATED, bug.getStatus());
+    }
 }

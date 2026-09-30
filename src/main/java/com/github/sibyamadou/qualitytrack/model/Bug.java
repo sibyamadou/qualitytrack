@@ -13,6 +13,7 @@ public class Bug {
         this.title = title;
         this.description = description;
         this.priority = priority;
+        // Tout nouveau bug commence avec avec un statut open
         this.status = BugStatus.OPEN;
     }
 
@@ -37,11 +38,15 @@ public class Bug {
     }
 
     public void startProgress() {
-        this.status = BugStatus.IN_PROGRESS;
+        if(this.status == BugStatus.OPEN){
+            this.status = BugStatus.IN_PROGRESS;
+        }
     }
 
     public void markAsFixed() {
-        this.status = BugStatus.FIXED;
+        if(this.status == BugStatus.IN_PROGRESS){
+            this.status = BugStatus.FIXED;
+        }
     }
 
     public void validate() {
