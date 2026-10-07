@@ -24,6 +24,12 @@ public class Bug {
                     "La priorité d'un bug ne peut pas être nulle"
             );
         }
+
+        if (description == null) {
+            throw new IllegalArgumentException(
+                    "La description d'un bug ne doit pas être nulle"
+            );
+        }
         this.id = id;
         this.title = title;
         this.description = description;

@@ -55,7 +55,7 @@ public class BugTest {
     }
     @Test
     void validatedBugShouldNotBeStartedAgain() {
-        
+
         bug.startProgress();
 
         assertEquals(BugStatus.IN_PROGRESS, bug.getStatus());
@@ -132,6 +132,19 @@ public class BugTest {
                         0,
                         "Erreur de connexion",
                         "Impossible de se connecter",
+                        Priority.HIGH
+                )
+        );
+    }
+
+    @Test
+    void bugShouldNotBeCreatedWithNullDescription() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Bug(
+                        11,
+                        "Erreur de connexion",
+                        null,
                         Priority.HIGH
                 )
         );
