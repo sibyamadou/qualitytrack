@@ -2,15 +2,15 @@ package com.github.sibyamadou.qualitytrack.service;
 import com.github.sibyamadou.qualitytrack.model.Bug;
 import  java.util.ArrayList;
 import  java.util.List;
+import org.springframework.stereotype.Service;
+@Service
 public class BugService {
     private final List<Bug> bugs = new ArrayList<>();
 
     public void addBug(Bug bug) {
         for (Bug existing : bugs) {
             if (existing.getId() == bug.getId()) {
-                throw new IllegalArgumentException(
-                        "Un bug avec l'identifiant " + bug.getId() + " existe déjà"
-                );
+                throw new DuplicateBugException(bug.getId());
             }
         }
         bugs.add(bug);
@@ -26,7 +26,7 @@ public class BugService {
                 return bug;
             }
         }
-        throw new IllegalArgumentException("Aucun bug avec l'identifiant " + id);
-    }
+        throw new BugNotFoundException(id);    }
+
 
 }

@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "a2d80e06-3603-41b9-9781-cddb424bbdec",
+		"name": "QualityTrack",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "58826882",
+		"_collection_link": "https://asiby80-8424672.postman.co/workspace/Amadou-Siby's-Workspace~a8e13f1d-74be-4812-8325-14905e487387/collection/58826882-a2d80e06-3603-41b9-9781-cddb424bbdec?action=share&source=collection_link&creator=58826882"
+	},
+	"item": [
+		{
+			"name": "Créer un bug valide",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Le code de statut est 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Le bug créé est OPEN\", function () {",
+							"    const bug = pm.response.json();",
+							"    pm.expect(bug.status).to.eql(\"OPEN\");",
+							"});",
+							"",
+							"pm.test(\"L'id du bug est retenu pour la suite\", function () {",
+							"    const bug = pm.response.json();",
+							"    pm.collectionVariables.set(\"bugId\", bug.id);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": {{$timestamp}},\n  \"title\": \"Erreur de connexion\",\n  \"description\": \"L'application plante avec un mauvais mot de passe\",\n  \"priority\": \"HIGH\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bugs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bugs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lister les bugs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bugs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bugs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consulter un bug existant",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Le code de statut est 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Le bug renvoyé a l'id demandé\", function () {",
+							"    const bug = pm.response.json();",
+							"    pm.expect(bug.id).to.eql(Number(pm.collectionVariables.get(\"bugId\")));",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bugs/{{bugId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bugs",
+						"{{bugId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consulter un bug inexistant",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Le code de statut est 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bugs/999999999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bugs",
+						"999999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Créer un bug avec un id déjà utilisé",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Le code de statut est 409\", function () {",
+							"    pm.response.to.have.status(409);",
+							"});",
+							"",
+							"pm.test(\"Le message explique le conflit\", function () {",
+							"    const body = pm.response.json();",
+							"    pm.expect(body.error).to.include(\"existe déjà\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": {{bugId}},\n  \"title\": \"Doublon\",\n  \"description\": \"Ce bug reprend l'id d'un bug existant\",\n  \"priority\": \"LOW\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bugs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bugs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Créer un bug avec un titre vide",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Le code de statut est 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": {{$timestamp}},\n  \"title\": \"\",\n  \"description\": \"Le titre de ce bug est vide\",\n  \"priority\": \"HIGH\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bugs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bugs"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "bugId",
+			"value": ""
+		}
+	]
+}
